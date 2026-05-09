@@ -45,6 +45,14 @@ pub const GLFW = struct {
         errorCheck2();
     }
 
+    pub const GLproc = *const fn () callconv(.c) void;
+    extern fn glfwGetProcAddress(procname: [*:0]const u8) ?GLproc;
+    pub fn getProcAddress(procname: [*:0]const u8) ?GLproc {
+        const res = glfwGetProcAddress(procname);
+        errorCheck2();
+        return res;
+    }
+
     extern fn glfwPollEvents() void;
     pub fn pollEvents(glfw: *GLFW) void {
         _ = glfw;
