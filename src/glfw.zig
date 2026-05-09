@@ -115,7 +115,7 @@ pub const Window = struct {
 
     extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor.Internal, share: ?*Internal) ?*Internal;
     pub fn create(width: u32, height: u32, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) !*Window {
-        const res = glfwCreateWindow(@intCast(width), @intCast(height), title, monitor.unwrapNull(), unwrapNull(share));
+        const res = glfwCreateWindow(@intCast(width), @intCast(height), title, Monitor.unwrapNull(monitor), unwrapNull(share));
         errorCheck2();
         return if (res) |r| wrap(r) else GLFWError.PlatformError;
     }
@@ -128,7 +128,7 @@ pub const Window = struct {
 
     extern fn glfwWindowShouldClose(window: ?*Internal) c_int;
     pub fn shouldClose(window: ?*Window) bool {
-        const res = glfwWindowShouldClose(window.unwrapNull());
+        const res = glfwWindowShouldClose(unwrapNull(window));
         errorCheck2();
         return res != 0;
     }
