@@ -45,6 +45,12 @@ pub const GLFW = struct {
         errorCheck2();
     }
 
+    extern fn glfwMakeContextCurrent(window: ?*Window.Internal) void;
+    pub fn makeContextCurrent(window: ?*Window) void {
+        glfwMakeContextCurrent(Window.unwrapNull(window));
+        errorCheck2();
+    }
+
     pub const GLproc = *const anyopaque; //fn () callconv(.c) void;
     extern fn glfwGetProcAddress(procname: [*:0]const u8) callconv(.c) ?GLproc;
     pub fn getProcAddress(procname: [*:0]const u8) callconv(.c) ?GLproc {
@@ -111,22 +117,22 @@ pub const Monitor = struct {
 };
 
 pub const Window = struct {
-    const Internal = c_long;
+    pub const Internal = c_long;
     id: Internal,
 
-    fn wrap(window: *Internal) *Window {
+    pub fn wrap(window: *Internal) *Window {
         return @ptrCast(window);
     }
 
-    fn wrapNull(window: ?*Internal) ?*Window {
+    pub fn wrapNull(window: ?*Internal) ?*Window {
         return if (window) |w| .wrap(w) else null;
     }
 
-    fn unwrap(window: *Window) *Internal {
+    pub fn unwrap(window: *Window) *Internal {
         return @ptrCast(window);
     }
 
-    fn unwrapNull(window: ?*Window) ?*Internal {
+    pub fn unwrapNull(window: ?*Window) ?*Internal {
         return if (window) |w| unwrap(w) else null;
     }
 
