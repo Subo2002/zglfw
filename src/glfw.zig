@@ -46,8 +46,8 @@ pub const GLFW = struct {
     }
 
     pub const GLproc = *const anyopaque; //fn () callconv(.c) void;
-    extern fn glfwGetProcAddress(procname: [*:0]const u8) ?GLproc;
-    pub fn getProcAddress(procname: [*:0]const u8) ?GLproc {
+    extern fn glfwGetProcAddress(procname: [*:0]const u8) callconv(.c) ?GLproc;
+    pub fn getProcAddress(procname: [*:0]const u8) callconv(.c) ?GLproc {
         const res = glfwGetProcAddress(procname);
         errorCheck2();
         return res;
