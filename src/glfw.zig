@@ -498,7 +498,7 @@ pub const Window = struct {
 
     extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*WindowInternal) ?*WindowInternal;
     pub fn create(width: u32, height: u32, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) !*Window {
-        const res = glfwCreateWindow(width, height, title, monitor, .initNull(share));
+        const res = glfwCreateWindow(@intCast(width), @intCast(height), title, monitor, .initNull(share));
         errorCheck2();
         if (res) |r| r else return GLFWError.PlatformError;
     }
