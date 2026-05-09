@@ -29,15 +29,27 @@ pub const GLFWError = error{
     NoError,
 };
 
-extern fn glfwInit() c_int;
-
-pub fn init() !void {
-    if (glfwInit() != 1) {
-        return GLFWError.PlatformError;
+pub const glfw = struct {
+    extern fn glfwInit() c_int;
+    pub fn init() !void {
+        if (glfwInit() != 1) {
+            return GLFWError.PlatformError;
+        }
     }
-}
 
-extern fn glfwTerminate() void;
+    extern fn glfwTerminate() void;
+    pub fn terminate() void {
+        glfwTerminate();
+        errorCheck2();
+    }
+
+    extern fn glfwPollEvents() void;
+    pub fn pollEvents() void {
+        glfwPollEvents();
+        errorCheck2();
+    }
+};
+
 extern fn glfwGetError(description: ?[*:0]const u8) c_int;
 
 fn errorCheck() !void {
@@ -64,11 +76,6 @@ fn errorCheck2() void {
             std.log.scoped(.zGLFW).err("{s}", .{@errorName(err)});
         }
     };
-}
-
-pub fn terminate() void {
-    glfwTerminate();
-    errorCheck2();
 }
 
 pub const Monitor = struct {
