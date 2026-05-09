@@ -513,7 +513,7 @@ pub const Window = struct {
 
     extern fn glfwDestroyWindow(window: ?*WindowInternal) void;
     pub fn destroy(window: ?*Window) void {
-        glfwDestroyWindow(wrapNull(window));
+        glfwDestroyWindow(unwrapNull(window));
         errorCheck2();
     }
 };
