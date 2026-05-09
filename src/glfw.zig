@@ -31,10 +31,11 @@ pub const GLFWError = error{
 
 pub const GLFW = struct {
     extern fn glfwInit() c_int;
-    pub fn init() !void {
+    pub fn init() !GLFW {
         if (glfwInit() != 1) {
             return GLFWError.PlatformError;
         }
+        return .{};
     }
 
     extern fn glfwTerminate() void;
