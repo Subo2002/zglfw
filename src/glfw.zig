@@ -127,7 +127,7 @@ pub const Window = struct {
     }
 
     extern fn glfwWindowShouldClose(window: ?*Internal) c_int;
-    pub fn windowShouldClose(window: ?*Window) bool {
+    pub fn shouldClose(window: ?*Window) bool {
         const res = glfwWindowShouldClose(window.unwrapNull());
         errorCheck2();
         return res != 0;
