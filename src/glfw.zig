@@ -129,6 +129,6 @@ pub const Window = struct {
     pub fn shouldClose(window: ?*Window) bool {
         const res = glfwWindowShouldClose(unwrapNull(window));
         errorCheck2();
-        return res == 0;
+        return res != 0;
     }
 };
