@@ -488,24 +488,32 @@ pub const Window = struct {
     const WindowInternal = c_long;
     id: WindowInternal,
 
-    pub fn init(window: *WindowInternal) *Window {
+    fn wrap(window: *WindowInternal) *Window {
         return @ptrCast(window);
     }
 
-    pub fn initNull(window: ?*WindowInternal) ?*Window {
-        return if (window) |w| .init(w) else null;
+    fn wrapNull(window: ?*WindowInternal) ?*Window {
+        return if (window) |w| .wrap(w) else null;
+    }
+
+    fn unwrap(window: *Window) *WindowInternal {
+        return @ptrCast(window);
+    }
+
+    fn unwrapNull(window: ?*Window) ?*WindowInternal {
+        return if (window) |w| unwrap(w) else null;
     }
 
     extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*WindowInternal) ?*WindowInternal;
     pub fn create(width: u32, height: u32, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) !*Window {
-        const res = glfwCreateWindow(@intCast(width), @intCast(height), title, monitor, .initNull(share));
+        const res = glfwCreateWindow(@intCast(width), @intCast(height), title, monitor, unwrapNull(share));
         errorCheck2();
         if (res) |r| r else return GLFWError.PlatformError;
     }
 
     extern fn glfwDestroyWindow(window: ?*WindowInternal) void;
     pub fn destroy(window: ?*Window) void {
-        glfwDestroyWindow(.initNull(window));
+        glfwDestroyWindow(wrapNull(window));
         errorCheck2();
     }
 };
