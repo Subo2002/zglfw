@@ -46,7 +46,8 @@ pub const GLFW = struct {
     }
 
     extern fn glfwMakeContextCurrent(window: ?*Window.Internal) void;
-    pub fn makeContextCurrent(window: ?*Window) void {
+    pub fn makeContextCurrent(glfw: *GLFW, window: ?*Window) void {
+        _ = glfw;
         glfwMakeContextCurrent(Window.unwrapNull(window));
         errorCheck2();
     }
