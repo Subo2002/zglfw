@@ -42,18 +42,18 @@ extern fn glfwGetError(description: ?[*:0]const u8) c_int;
 
 fn errorCheck() !void {
     const code: ErrorCode = @enumFromInt(glfwGetError(null));
-    const err: GLFWError = switch (code) {
-        .NotInitialized => .NotInitialized,
-        .NoCurrentContext => .NoCurrentContext,
-        .InvalidEnum => .InvalidEnum,
-        .InvalidValue => .InvalidValue,
-        .OutOfMemory => .OutOfMemory,
-        .APIUnavailable => .APIUnavailable,
-        .VersionUnavailable => .VersionUnavailable,
-        .PlatformError => .PlatformError,
-        .FormatUnavailable => .FormatUnavailable,
-        .NoWindowContext => .NoWindowContext,
-        .NoError => .NoError,
+    const err = switch (code) {
+        .NotInitialized => GLFWError.NotInitialized,
+        .NoCurrentContext => GLFWError.NoCurrentContext,
+        .InvalidEnum => GLFWError.InvalidEnum,
+        .InvalidValue => GLFWError.InvalidValue,
+        .OutOfMemory => GLFWError.OutOfMemory,
+        .APIUnavailable => GLFWError.APIUnavailable,
+        .VersionUnavailable => GLFWError.VersionUnavailable,
+        .PlatformError => GLFWError.PlatformError,
+        .FormatUnavailable => GLFWError.FormatUnavailable,
+        .NoWindowContext => GLFWError.NoWindowContext,
+        .NoError => GLFWError.NoError,
     };
     return err;
 }
