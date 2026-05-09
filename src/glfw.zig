@@ -54,7 +54,6 @@ fn errorCheck() !void {
         .FormatUnavailable => .FormatUnavailable,
         .NoWindowContext => .NoWindowContext,
         .NoError => .NoError,
-        else => .NoError,
     };
     return err;
 }
