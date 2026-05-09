@@ -73,22 +73,22 @@ pub fn terminate() void {
 }
 
 pub const Monitor = struct {
-    const Internal = c_long;
+    pub const Internal = c_long;
     id: Internal,
 
-    fn wrap(monitor: *Internal) *Window {
+    pub fn wrap(monitor: *Internal) *Monitor {
         return @ptrCast(monitor);
     }
 
-    fn wrapNull(monitor: ?*Internal) ?*Window {
+    pub fn wrapNull(monitor: ?*Internal) ?*Monitor {
         return if (monitor) |m| .wrap(m) else null;
     }
 
-    fn unwrap(monitor: *Window) *Internal {
+    pub fn unwrap(monitor: *Monitor) *Internal {
         return @ptrCast(monitor);
     }
 
-    fn unwrapNull(monitor: ?*Window) ?*Internal {
+    pub fn unwrapNull(monitor: ?*Monitor) ?*Internal {
         return if (monitor) |m| unwrap(m) else null;
     }
 };
