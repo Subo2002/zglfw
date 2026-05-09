@@ -29,7 +29,7 @@ pub const GLFWError = error{
     NoError,
 };
 
-pub const glfw = struct {
+pub const GLFW = struct {
     extern fn glfwInit() c_int;
     pub fn init() !void {
         if (glfwInit() != 1) {
