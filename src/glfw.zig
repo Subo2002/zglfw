@@ -483,7 +483,33 @@ pub const GLproc = *const fn () callconv(.c) void;
 pub const VKproc = *const fn () callconv(.c) void;
 
 pub const Monitor = c_long;
-pub const Window = c_long;
+
+pub const Window = struct {
+    const WindowInternal = c_long;
+    id: WindowInternal,
+
+    pub fn init(window: *WindowInternal) *Window {
+        return @ptrCast(window);
+    }
+
+    pub fn initNull(window: ?*WindowInternal) ?*Window {
+        return if (window) |w| .init(w) else null;
+    }
+
+    extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*WindowInternal) ?*WindowInternal;
+    pub fn createWindow(width: u32, height: u32, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) !*Window {
+        const res = glfwCreateWindow(width, height, title, monitor, .initNull(share));
+        errorCheck2();
+        if (res) |r| r else return GLFWError.PlatformError;
+    }
+
+    extern fn glfwDestroyWindow(window: ?*WindowInternal) void;
+    pub fn destroyWindow(window: ?*Window) void {
+        glfwDestroyWindow(.initNull(window));
+        errorCheck2();
+    }
+};
+
 pub const CursorHandle = c_long;
 
 pub const ErrorFun = *const fn (error_code: c_int, description: [*:0]u8) callconv(.c) void;
@@ -704,22 +730,6 @@ pub fn windowHint(hint: WindowHint, value: c_int) void {
 extern fn glfwWindowHintString(hint: c_int, value: [*:0]const u8) void;
 pub fn windowHintString(hint: WindowHint, value: [*:0]const u8) void {
     glfwWindowHintString((hint), value);
-    errorCheck2();
-}
-
-extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) ?*Window;
-pub fn createWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) !*Window {
-    const res = glfwCreateWindow(width, height, title, monitor, share);
-    errorCheck2();
-    if (res == null) {
-        return GLFWError.PlatformError;
-    }
-    return res.?;
-}
-
-extern fn glfwDestroyWindow(window: ?*Window) void;
-pub fn destroyWindow(window: ?*Window) void {
-    glfwDestroyWindow(window);
     errorCheck2();
 }
 
