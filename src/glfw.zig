@@ -52,6 +52,13 @@ pub const GLFW = struct {
         errorCheck2();
     }
 
+    extern fn glfwSwapBuffers(window: ?*Window.Internal) void;
+    pub fn swapBuffers(glfw: *GLFW, window: ?*Window) void {
+        _ = glfw;
+        glfwSwapBuffers(Window.unwrapNull(window));
+        errorCheck2();
+    }
+
     pub const GLproc = *const anyopaque; //fn () callconv(.c) void;
     extern fn glfwGetProcAddress(procname: [*:0]const u8) callconv(.c) ?GLproc;
     pub fn getProcAddress(procname: [*:0]const u8) callconv(.c) ?GLproc {
