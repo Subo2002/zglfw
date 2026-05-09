@@ -39,13 +39,15 @@ pub const GLFW = struct {
     }
 
     extern fn glfwTerminate() void;
-    pub fn terminate() void {
+    pub fn terminate(glfw: *GLFW) void {
+        _ = glfw;
         glfwTerminate();
         errorCheck2();
     }
 
     extern fn glfwPollEvents() void;
-    pub fn pollEvents() void {
+    pub fn pollEvents(glfw: *GLFW) void {
+        _ = glfw;
         glfwPollEvents();
         errorCheck2();
     }
